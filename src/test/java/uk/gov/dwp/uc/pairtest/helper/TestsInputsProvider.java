@@ -24,4 +24,16 @@ public class TestsInputsProvider {
         TicketTypeRequest[] ticketRequests = list.toArray(new TicketTypeRequest[0]);
         return ticketRequests;
     }
+
+    public static TicketTypeRequest[] createTicketRequestsWithNullContent() {
+        TicketTypeRequest[] ticketRequests = new TicketTypeRequest[1];
+        ticketRequests[0] = null;
+        return ticketRequests;
+    }
+
+    public static TicketTypeRequest[] createTicketRequestsWithInvalidContent() {
+        TicketTypeRequest[] ticketRequests = new TicketTypeRequest[1];
+        ticketRequests[0] = new TicketTypeRequest(null, -2);
+        return ticketRequests;
+    }
 }

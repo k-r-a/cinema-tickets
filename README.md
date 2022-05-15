@@ -1,8 +1,9 @@
 # Objective
 
-This is a coding exercise which will allow you to demonstrate how you code and your approach to a given problem. 
+This is a coding exercise which will allow you to demonstrate how you code and your approach to a given problem.
 
-You will be assessed on: 
+You will be assessed on:
+
 - Your ability to write clean, well-tested and reusable code.
 - How you have ensured the following business rules are correctly met.
 
@@ -34,19 +35,22 @@ You will be assessed on:
 ## Assumptions
 
 You can assume:
-- All accounts with an id greater than zero are valid. They also have sufficient funds to pay for any no of tickets.
-- The TicketPaymentService implementation is an external provider with no defects. You do not need to worry about how the actual payment happens.
-- The payment will always go through once a payment request has been made to the TicketPaymentService.
-- The SeatReservationService implementation is an external provider with no defects. You do not need to worry about how the seat reservation algorithm works.
-- The seat will always be reserved once a reservation request has been made to the SeatReservationService.
 
+- All accounts with an id greater than zero are valid. They also have sufficient funds to pay for any no of tickets.
+- The TicketPaymentService implementation is an external provider with no defects. You do not need to worry about how
+  the actual payment happens.
+- The payment will always go through once a payment request has been made to the TicketPaymentService.
+- The SeatReservationService implementation is an external provider with no defects. You do not need to worry about how
+  the seat reservation algorithm works.
+- The seat will always be reserved once a reservation request has been made to the SeatReservationService.
 
 ## Your Task
 
 Provide a working implementation of a TicketService that:
 
 - Considers the above objective, business rules, constraints & assumptions.
-- Calculates the correct amount for the requested tickets and makes a payment request to the TicketPaymentService.  
-- Calculates the correct no of seats to reserve and makes a seat reservation request to the SeatReservationService.  
-- Rejects any invalid ticket purchase requests. It is up to you to identify what should be deemed as an invalid purchase request.
+- Calculates the correct amount for the requested tickets and makes a payment request to the TicketPaymentService.
+- Calculates the correct no of seats to reserve and makes a seat reservation request to the SeatReservationService.
+- Rejects any invalid ticket purchase requests. It is up to you to identify what should be deemed as an invalid purchase
+  request.
 
