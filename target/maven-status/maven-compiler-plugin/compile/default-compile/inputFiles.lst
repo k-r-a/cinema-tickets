@@ -1,7 +1,0 @@
-/Users/kalpita.adagatla/Documents/Kalpita/cinema-tickets/src/main/java/uk/gov/dwp/uc/pairtest/domain/TicketTypeRequest.java
-/Users/kalpita.adagatla/Documents/Kalpita/cinema-tickets/src/main/java/uk/gov/dwp/uc/pairtest/TicketServiceImpl.java
-/Users/kalpita.adagatla/Documents/Kalpita/cinema-tickets/src/main/java/thirdparty/paymentgateway/TicketPaymentServiceImpl.java
-/Users/kalpita.adagatla/Documents/Kalpita/cinema-tickets/src/main/java/thirdparty/paymentgateway/TicketPaymentService.java
-/Users/kalpita.adagatla/Documents/Kalpita/cinema-tickets/src/main/java/uk/gov/dwp/uc/pairtest/TicketService.java
-/Users/kalpita.adagatla/Documents/Kalpita/cinema-tickets/src/main/java/uk/gov/dwp/uc/pairtest/exception/InvalidPurchaseException.java
-/Users/kalpita.adagatla/Documents/Kalpita/cinema-tickets/src/main/java/thirdparty/seatbooking/SeatReservationService.java
