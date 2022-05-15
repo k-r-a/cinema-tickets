@@ -1,0 +1,15 @@
+infant:
+  ticket:
+    price: 0
+
+child:
+  ticket:
+    price: 10
+
+adult:
+  ticket:
+    price: 20
+
+max:
+  tickets:
+    allowed: 20

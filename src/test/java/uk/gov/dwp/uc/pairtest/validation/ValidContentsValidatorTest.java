@@ -21,9 +21,6 @@ public class ValidContentsValidatorTest {
     @Autowired
     Validator validator;
 
-  /*  @Mock
-    ConstraintValidatorContext constraint;*/
-
     @Test
     @Description("When array has invalid contents then validation fails")
     void whenContentsAreInvalid_thenNotValid() {

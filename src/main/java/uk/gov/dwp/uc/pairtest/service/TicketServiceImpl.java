@@ -8,11 +8,10 @@ import thirdparty.seatbooking.SeatReservationService;
 import uk.gov.dwp.uc.pairtest.TicketService;
 import uk.gov.dwp.uc.pairtest.domain.TicketServiceInputsWrapper;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
+import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequestsInfo;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
-import uk.gov.dwp.uc.pairtest.validation.AdvanceValidationGroup;
-import uk.gov.dwp.uc.pairtest.validation.BasicValidationGroup;
-import uk.gov.dwp.uc.pairtest.validation.IntermediateValidationGroup;
-import uk.gov.dwp.uc.pairtest.validation.ValidationGroup;
+import uk.gov.dwp.uc.pairtest.util.TicketServiceUtil;
+import uk.gov.dwp.uc.pairtest.validation.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -27,6 +26,9 @@ public class TicketServiceImpl implements TicketService {
     private Validator validator;
 
     @Autowired
+    private TicketsRuleValidator ticketsRuleValidator;
+
+    @Autowired
     private TicketPaymentService ticketPaymentService;
 
     @Autowired
@@ -39,7 +41,13 @@ public class TicketServiceImpl implements TicketService {
     public void purchaseTickets(Long accountId, TicketTypeRequest... ticketTypeRequests) throws InvalidPurchaseException {
 
         performInputValidation(accountId, ticketTypeRequests);
-        //Validate Business rules
+        performBusinessValidation(ticketTypeRequests);
+
+        TicketTypeRequestsInfo ticketsInfo = TicketServiceUtil.parseTicketTypeRequests(ticketTypeRequests);
+        int noOfInfantBookings = ticketsInfo.getNoOfInfantBookings();
+        int noOfChildBookings = ticketsInfo.getNoOfChildBookings();
+        int noOfAdultBookings = ticketsInfo.getNoOfAdultBookings();
+
         //Call TicketPaymentService
         //Call SeatReservationService
     }
@@ -61,6 +69,14 @@ public class TicketServiceImpl implements TicketService {
             }
             log.error(inputsWrapperBasicConstraintViolations.toString());
             throw new InvalidPurchaseException("Constraint Violations Error occurred: " + sb.toString());
+        }
+    }
+
+    private void performBusinessValidation(TicketTypeRequest[] ticketTypeRequests) {
+        StringJoiner validationErrors = ticketsRuleValidator.validate(ticketTypeRequests);
+
+        if (validationErrors.length() > 1) {
+            throw new InvalidPurchaseException(validationErrors.toString());
         }
     }
 }
