@@ -1,6 +1,7 @@
 package uk.gov.dwp.uc.pairtest.validation;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,10 @@ import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.helper.TestsInputsProvider;
 
 @SpringBootTest
-public class TicketsRuleValidatorTest {
+class TicketsRuleValidatorTest {
 
     @Autowired
-    TicketsRuleValidator ticketsRuleValidator;
+    private TicketsRuleValidator ticketsRuleValidator;
 
     @ParameterizedTest
     @CsvSource({"1,0,0", "0,1,0", "5,10,10"})
@@ -21,6 +22,7 @@ public class TicketsRuleValidatorTest {
         Assertions.assertTrue((ticketsRuleValidator.validate(ticketRequests)).length() > 1);
     }
 
+    @Test
     void whenNoRuleViolations_thenValid() {
         TicketTypeRequest[] ticketRequests = TestsInputsProvider.createTicketRequests(1, 1, 1);
         Assertions.assertTrue((ticketsRuleValidator.validate(ticketRequests)).length() == 0);

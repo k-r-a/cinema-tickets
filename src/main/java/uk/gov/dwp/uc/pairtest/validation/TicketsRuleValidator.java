@@ -25,7 +25,7 @@ public class TicketsRuleValidator {
         StringJoiner errors = new StringJoiner(",");
         for (TicketRule rule : rules) {
             ValidationStatus validationStatus = rule.isValid(ticketRequests);
-            if (validationStatus.getStatus().equals(ValidationStatus.Status.INVALID)) {
+            if (ValidationStatus.Status.INVALID.equals(validationStatus.getStatus())) {
                 errors.add(validationStatus.getMessage());
             }
         }

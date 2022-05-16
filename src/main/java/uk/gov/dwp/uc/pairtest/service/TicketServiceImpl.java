@@ -10,6 +10,7 @@ import uk.gov.dwp.uc.pairtest.domain.TicketServiceInputsWrapper;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequestsInfo;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
+import uk.gov.dwp.uc.pairtest.util.TicketPriceCalculator;
 import uk.gov.dwp.uc.pairtest.util.TicketServiceUtil;
 import uk.gov.dwp.uc.pairtest.validation.*;
 
@@ -29,6 +30,9 @@ public class TicketServiceImpl implements TicketService {
     private TicketsRuleValidator ticketsRuleValidator;
 
     @Autowired
+    private TicketPriceCalculator ticketPriceCalculator;
+
+    @Autowired
     private TicketPaymentService ticketPaymentService;
 
     @Autowired
@@ -39,17 +43,22 @@ public class TicketServiceImpl implements TicketService {
      */
     @Override
     public void purchaseTickets(Long accountId, TicketTypeRequest... ticketTypeRequests) throws InvalidPurchaseException {
+        try {
+            performInputValidation(accountId, ticketTypeRequests);
+            performBusinessValidation(ticketTypeRequests);
 
-        performInputValidation(accountId, ticketTypeRequests);
-        performBusinessValidation(ticketTypeRequests);
+            TicketTypeRequestsInfo ticketsInfo = TicketServiceUtil.parseTicketTypeRequests(ticketTypeRequests);
+            int noOfInfantBookings = ticketsInfo.getNoOfInfantBookings();
+            int noOfChildBookings = ticketsInfo.getNoOfChildBookings();
+            int noOfAdultBookings = ticketsInfo.getNoOfAdultBookings();
 
-        TicketTypeRequestsInfo ticketsInfo = TicketServiceUtil.parseTicketTypeRequests(ticketTypeRequests);
-        int noOfInfantBookings = ticketsInfo.getNoOfInfantBookings();
-        int noOfChildBookings = ticketsInfo.getNoOfChildBookings();
-        int noOfAdultBookings = ticketsInfo.getNoOfAdultBookings();
+            makePayment(accountId, noOfInfantBookings, noOfChildBookings, noOfAdultBookings);
 
-        //Call TicketPaymentService
-        //Call SeatReservationService
+            reserveSeats(accountId, noOfChildBookings, noOfAdultBookings);
+        } catch (InvalidPurchaseException e) {
+            log.error("Error in purchase tickets in Tickets Service", e);
+            throw e;
+        }
     }
 
     private void performInputValidation(Long accountId, TicketTypeRequest[] ticketTypeRequests) {
@@ -78,5 +87,17 @@ public class TicketServiceImpl implements TicketService {
         if (validationErrors.length() > 1) {
             throw new InvalidPurchaseException(validationErrors.toString());
         }
+    }
+
+    private void makePayment(Long accountId, int noOfInfantBookings, int noOfChildBookings, int noOfAdultBookings) {
+        int totalAmountToPay = ticketPriceCalculator.calculateTotalPriceForTickets(noOfInfantBookings, noOfChildBookings, noOfAdultBookings);
+        log.debug("TicketPaymentService called to make a payment of {} ", totalAmountToPay);
+        ticketPaymentService.makePayment(accountId, totalAmountToPay);
+    }
+
+    private void reserveSeats(Long accountId, int noOfChildBookings, int noOfAdultBookings) {
+        int totalSeatsToAllocate = noOfChildBookings + noOfAdultBookings;
+        log.debug("SeatReservationService called to book {} seats", totalSeatsToAllocate);
+        seatReservationService.reserveSeat(accountId, totalSeatsToAllocate);
     }
 }

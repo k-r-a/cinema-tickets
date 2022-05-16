@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Description;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
@@ -14,13 +14,13 @@ import uk.gov.dwp.uc.pairtest.helper.TestsInputsProvider;
 import javax.validation.ConstraintValidatorContext;
 
 @SpringBootTest
-public class NotNullContentsValidatorTest {
+class NotNullContentsValidatorTest {
 
-    @InjectMocks
-    NotNullContentsValidator notNullContentsValidator = new NotNullContentsValidator();
+    @Autowired
+    private NotNullContentsValidator notNullContentsValidator;
 
     @Mock
-    ConstraintValidatorContext constraint;
+    private ConstraintValidatorContext constraint;
 
     @Test
     @Description("When array contains null then validation fails")

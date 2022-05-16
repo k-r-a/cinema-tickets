@@ -27,9 +27,6 @@ public class ValidContentsValidator implements ConstraintValidator<ValidContents
     public boolean isValid(TicketTypeRequest[] ticketTypeRequests, ConstraintValidatorContext constraintValidatorContext) {
         Set<ConstraintViolation<TicketTypeRequest>> ticketTypeRequestsConstraintViolations = new HashSet<>();
         Arrays.stream(ticketTypeRequests).allMatch(ticketTypeRequest -> ticketTypeRequestsConstraintViolations.addAll(validator.validate(ticketTypeRequest)));
-        if (!ticketTypeRequestsConstraintViolations.isEmpty()) {
-            return false;
-        }
-        return true;
+        return ticketTypeRequestsConstraintViolations.isEmpty();
     }
 }

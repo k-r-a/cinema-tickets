@@ -13,7 +13,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class TicketServiceInputsWrapperTest {
@@ -22,29 +22,12 @@ class TicketServiceInputsWrapperTest {
     private Validator validator;
 
     @Test
-    void whenAllArgumentsPassed_thenObjectIsCreated() {
-        TicketTypeRequest[] ticketTypeRequests = TestsInputsProvider.createTicketRequests(1, 1, 1);
-        TicketServiceInputsWrapper wrapper = new TicketServiceInputsWrapper(1L, ticketTypeRequests);
-
-        assertEquals(1L, wrapper.getAccountId());
-        assertNotNull(wrapper.getTicketTypeRequests());
-    }
-
-    @Test
     void whenAllValidArgumentsPassed_thenExpectNoViolations() {
         TicketTypeRequest[] ticketTypeRequests = TestsInputsProvider.createTicketRequests(1, 1, 1);
         TicketServiceInputsWrapper wrapper = new TicketServiceInputsWrapper(1L, ticketTypeRequests);
 
         Set<ConstraintViolation<TicketServiceInputsWrapper>> violations = validator.validate(wrapper);
         assertEquals(0, violations.size());
-    }
-
-    @Test
-    void whenTicketTypeArgumentIsNull_thenObjectIsCreatedWithNullType() {
-        TicketServiceInputsWrapper wrapper = new TicketServiceInputsWrapper(1L, null);
-
-        assertEquals(1L, wrapper.getAccountId());
-        assertNull(wrapper.getTicketTypeRequests());
     }
 
     @Test
@@ -64,11 +47,7 @@ class TicketServiceInputsWrapperTest {
     @Test
     void whenAccountIdIsNullArgumentIsNull_thenExpectViolations() {
 
-        TicketTypeRequest adultTicket = new TicketTypeRequest(Type.ADULT, 1);
-        TicketTypeRequest childTicket = new TicketTypeRequest(Type.CHILD, 1);
-        TicketTypeRequest infantTicket = new TicketTypeRequest(Type.INFANT, 1);
-
-        TicketTypeRequest[] ticketTypeRequests = {adultTicket, childTicket, infantTicket};
+        TicketTypeRequest[] ticketTypeRequests = TestsInputsProvider.createTicketRequests(1, 1, 1);
 
         TicketServiceInputsWrapper wrapper = new TicketServiceInputsWrapper(null, ticketTypeRequests);
 

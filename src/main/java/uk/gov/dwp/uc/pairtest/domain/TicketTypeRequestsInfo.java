@@ -4,14 +4,13 @@ import lombok.Getter;
 
 @Getter
 public class TicketTypeRequestsInfo {
-    public int noOfInfantBookings = 0;
-    public int noOfChildBookings = 0;
-    public int noOfAdultBookings = 0;
+    private int noOfInfantBookings;
+    private int noOfChildBookings;
+    private int noOfAdultBookings;
 
     public TicketTypeRequestsInfo(int noOfInfantBookings, int noOfChildBookings, int noOfAdultBookings) {
         this.noOfInfantBookings = noOfInfantBookings;
         this.noOfChildBookings = noOfChildBookings;
         this.noOfAdultBookings = noOfAdultBookings;
     }
-
 }

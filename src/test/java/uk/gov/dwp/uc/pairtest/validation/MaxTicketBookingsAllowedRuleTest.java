@@ -2,8 +2,9 @@ package uk.gov.dwp.uc.pairtest.validation;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
@@ -15,12 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 class MaxTicketBookingsAllowedRuleTest {
 
-    @InjectMocks
+    @Autowired
     private MaxTicketBookingsAllowedRule rule;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
         ReflectionTestUtils.setField(rule, "maxTicketsAllowed", "20");
     }
 
@@ -32,16 +32,12 @@ class MaxTicketBookingsAllowedRuleTest {
         assertEquals(validationStatus.getMessage(), "Number of booking requests exceeded maximum limit");
     }
 
-    @Test
-    void whenTicketsBookedWithinLimit_thenValid() {
-        TicketTypeRequest[] ticketRequests = TestsInputsProvider.createTicketRequests(2, 2, 2);
-        ValidationStatus validationStatus = rule.isValid(ticketRequests);
-        assertEquals(validationStatus.getStatus(), ValidationStatus.Status.VALID);
-    }
-
-    @Test
-    void whenTicketsBookedSameAsLimit_thenValid() {
-        TicketTypeRequest[] ticketRequests = TestsInputsProvider.createTicketRequests(5, 5, 10);
+    @ParameterizedTest
+    @CsvSource({"2,2,2", "5,5,10"})
+    void whenTicketsBookedWithinLimit_thenValid(int noOfInfantBookings, int noOfChildBookings,
+                                                int noOfAdultBookings) {
+        TicketTypeRequest[] ticketRequests = TestsInputsProvider
+                .createTicketRequests(noOfInfantBookings, noOfChildBookings, noOfAdultBookings);
         ValidationStatus validationStatus = rule.isValid(ticketRequests);
         assertEquals(validationStatus.getStatus(), ValidationStatus.Status.VALID);
     }

@@ -10,16 +10,11 @@ import org.springframework.context.annotation.Description;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.helper.TestsInputsProvider;
 
-import javax.validation.Validator;
-
 @SpringBootTest
-public class ValidContentsValidatorTest {
+class ValidContentsValidatorTest {
 
     @Autowired
-    ValidContentsValidator validContentsValidator;
-
-    @Autowired
-    Validator validator;
+    private ValidContentsValidator validContentsValidator;
 
     @Test
     @Description("When array has invalid contents then validation fails")

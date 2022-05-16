@@ -1,11 +1,14 @@
 package uk.gov.dwp.uc.pairtest.util;
 
-import lombok.extern.slf4j.Slf4j;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequestsInfo;
 
-@Slf4j
 public class TicketServiceUtil {
+
+    private TicketServiceUtil() {
+    }
+
+    ;
 
     public static TicketTypeRequestsInfo parseTicketTypeRequests(TicketTypeRequest[] ticketTypeRequests) {
         int noOfInfantBookings = 0;
