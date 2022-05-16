@@ -15,30 +15,32 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 class NoInfantOrChildWithoutAdultRuleTest {
 
-    @InjectMocks
-    private NoInfantOrChildWithoutAdultRule rule;
+	@InjectMocks
+	private NoInfantOrChildWithoutAdultRule rule;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+	@BeforeEach
+	void setUp() {
+		MockitoAnnotations.openMocks(this);
+	}
 
-    @ParameterizedTest
-    @CsvSource({"1, 0, 0", "0, 1, 0"})
-    void whenInfantOrChildBookedWithoutAdult_thenInvalid(int noOfInfantBookings, int noOfChildBookings,
-                                                         int noOfAdultBookings) {
-        TicketTypeRequest[] ticketRequests = TestsInputsProvider.createTicketRequests(noOfInfantBookings, noOfChildBookings, noOfAdultBookings);
-        ValidationStatus validationStatus = rule.isValid(ticketRequests);
-        assertEquals(validationStatus.getStatus(), ValidationStatus.Status.INVALID);
-        assertEquals(validationStatus.getMessage(), "Infant or child ticket cannot be booked without adult");
-    }
+	@ParameterizedTest
+	@CsvSource({ "1, 0, 0", "0, 1, 0" })
+	void whenInfantOrChildBookedWithoutAdult_thenInvalid(int noOfInfantBookings, int noOfChildBookings,
+			int noOfAdultBookings) {
+		TicketTypeRequest[] ticketRequests = TestsInputsProvider.createTicketRequests(noOfInfantBookings,
+				noOfChildBookings, noOfAdultBookings);
+		ValidationStatus validationStatus = rule.isValid(ticketRequests);
+		assertEquals(validationStatus.getStatus(), ValidationStatus.Status.INVALID);
+		assertEquals(validationStatus.getMessage(), "Infant or child ticket cannot be booked without adult");
+	}
 
-    @ParameterizedTest
-    @CsvSource({"1, 0, 1", "0, 1, 1", "0, 0, 1"})
-    void whenAdultBookedWithOrWithoutDependants_thenValid(int noOfInfantBookings, int noOfChildBookings,
-                                                          int noOfAdultBookings) {
-        TicketTypeRequest[] ticketRequests = TestsInputsProvider.createTicketRequests(noOfInfantBookings, noOfChildBookings, noOfAdultBookings);
-        ValidationStatus validationStatus = rule.isValid(ticketRequests);
-        assertEquals(validationStatus.getStatus(), ValidationStatus.Status.VALID);
-    }
+	@ParameterizedTest
+	@CsvSource({ "1, 0, 1", "0, 1, 1", "0, 0, 1" })
+	void whenAdultBookedWithOrWithoutDependants_thenValid(int noOfInfantBookings, int noOfChildBookings,
+			int noOfAdultBookings) {
+		TicketTypeRequest[] ticketRequests = TestsInputsProvider.createTicketRequests(noOfInfantBookings,
+				noOfChildBookings, noOfAdultBookings);
+		ValidationStatus validationStatus = rule.isValid(ticketRequests);
+		assertEquals(validationStatus.getStatus(), ValidationStatus.Status.VALID);
+	}
 }

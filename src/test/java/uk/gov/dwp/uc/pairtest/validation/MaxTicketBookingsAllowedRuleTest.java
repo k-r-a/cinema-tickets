@@ -16,30 +16,28 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 class MaxTicketBookingsAllowedRuleTest {
 
-    @Autowired
-    private MaxTicketBookingsAllowedRule rule;
+	@Autowired
+	private MaxTicketBookingsAllowedRule rule;
 
-    @BeforeEach
-    void setUp() {
-        ReflectionTestUtils.setField(rule, "maxTicketsAllowed", "20");
-    }
+	@BeforeEach
+	void setUp() {
+		ReflectionTestUtils.setField(rule, "maxTicketsAllowed", "20");
+	}
 
-    @Test
-    void whenExcessTicketsAreBooked_thenInvalid() {
-        TicketTypeRequest[] ticketRequests = TestsInputsProvider.createTicketRequests(10, 10, 15);
-        ValidationStatus validationStatus = rule.isValid(ticketRequests);
-        assertEquals(validationStatus.getStatus(), ValidationStatus.Status.INVALID);
-        assertEquals(validationStatus.getMessage(), "Number of booking requests exceeded maximum limit");
-    }
+	@Test
+	void whenExcessTicketsAreBooked_thenInvalid() {
+		TicketTypeRequest[] ticketRequests = TestsInputsProvider.createTicketRequests(10, 10, 15);
+		ValidationStatus validationStatus = rule.isValid(ticketRequests);
+		assertEquals(validationStatus.getStatus(), ValidationStatus.Status.INVALID);
+		assertEquals(validationStatus.getMessage(), "Number of booking requests exceeded maximum limit");
+	}
 
-    @ParameterizedTest
-    @CsvSource({"2,2,2", "5,5,10"})
-    void whenTicketsBookedWithinLimit_thenValid(int noOfInfantBookings, int noOfChildBookings,
-                                                int noOfAdultBookings) {
-        TicketTypeRequest[] ticketRequests = TestsInputsProvider
-                .createTicketRequests(noOfInfantBookings, noOfChildBookings, noOfAdultBookings);
-        ValidationStatus validationStatus = rule.isValid(ticketRequests);
-        assertEquals(validationStatus.getStatus(), ValidationStatus.Status.VALID);
-    }
+	@ParameterizedTest
+	@CsvSource({ "2,2,2", "5,5,10" })
+	void whenTicketsBookedWithinLimit_thenValid(int noOfInfantBookings, int noOfChildBookings, int noOfAdultBookings) {
+		TicketTypeRequest[] ticketRequests = TestsInputsProvider.createTicketRequests(noOfInfantBookings,
+				noOfChildBookings, noOfAdultBookings);
+		ValidationStatus validationStatus = rule.isValid(ticketRequests);
+		assertEquals(validationStatus.getStatus(), ValidationStatus.Status.VALID);
+	}
 }
-

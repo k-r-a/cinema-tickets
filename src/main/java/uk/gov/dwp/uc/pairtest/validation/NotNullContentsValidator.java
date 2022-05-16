@@ -10,8 +10,8 @@ import java.util.Arrays;
 @Component
 public class NotNullContentsValidator implements ConstraintValidator<NotNullContents, TicketTypeRequest[]> {
 
-    @Override
-    public boolean isValid(TicketTypeRequest[] ticketRequests, ConstraintValidatorContext context) {
-        return Arrays.stream(ticketRequests).allMatch(ticketTypeRequest -> ticketTypeRequest != null);
-    }
+	@Override
+	public boolean isValid(TicketTypeRequest[] ticketRequests, ConstraintValidatorContext context) {
+		return Arrays.stream(ticketRequests).allMatch(ticketTypeRequest -> ticketTypeRequest != null);
+	}
 }

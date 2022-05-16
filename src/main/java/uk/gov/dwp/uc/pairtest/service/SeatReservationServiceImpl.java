@@ -5,8 +5,8 @@ import thirdparty.seatbooking.SeatReservationService;
 
 @Service
 public class SeatReservationServiceImpl implements SeatReservationService {
-    @Override
-    public void reserveSeat(long accountId, int totalSeatsToAllocate) {
-        // Real implementation omitted
-    }
+	@Override
+	public void reserveSeat(long accountId, int totalSeatsToAllocate) {
+		// Real implementation omitted
+	}
 }

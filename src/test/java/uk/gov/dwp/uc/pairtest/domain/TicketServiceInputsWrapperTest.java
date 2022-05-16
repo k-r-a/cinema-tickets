@@ -18,89 +18,89 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 class TicketServiceInputsWrapperTest {
 
-    @Autowired
-    private Validator validator;
+	@Autowired
+	private Validator validator;
 
-    @Test
-    void whenAllValidArgumentsPassed_thenExpectNoViolations() {
-        TicketTypeRequest[] ticketTypeRequests = TestsInputsProvider.createTicketRequests(1, 1, 1);
-        TicketServiceInputsWrapper wrapper = new TicketServiceInputsWrapper(1L, ticketTypeRequests);
+	@Test
+	void whenAllValidArgumentsPassed_thenExpectNoViolations() {
+		TicketTypeRequest[] ticketTypeRequests = TestsInputsProvider.createTicketRequests(1, 1, 1);
+		TicketServiceInputsWrapper wrapper = new TicketServiceInputsWrapper(1L, ticketTypeRequests);
 
-        Set<ConstraintViolation<TicketServiceInputsWrapper>> violations = validator.validate(wrapper);
-        assertEquals(0, violations.size());
-    }
+		Set<ConstraintViolation<TicketServiceInputsWrapper>> violations = validator.validate(wrapper);
+		assertEquals(0, violations.size());
+	}
 
-    @Test
-    void whenAccountIdArgumentIsNull_thenExpectViolations() {
-        TicketTypeRequest[] ticketTypeRequests = TestsInputsProvider.createTicketRequests(1, 1, 1);
-        TicketServiceInputsWrapper wrapper = new TicketServiceInputsWrapper(-2L, ticketTypeRequests);
+	@Test
+	void whenAccountIdArgumentIsNull_thenExpectViolations() {
+		TicketTypeRequest[] ticketTypeRequests = TestsInputsProvider.createTicketRequests(1, 1, 1);
+		TicketServiceInputsWrapper wrapper = new TicketServiceInputsWrapper(-2L, ticketTypeRequests);
 
-        Set<ConstraintViolation<TicketServiceInputsWrapper>> violations = validator.validate(wrapper,
-                BasicValidationGroup.class);
+		Set<ConstraintViolation<TicketServiceInputsWrapper>> violations = validator.validate(wrapper,
+				BasicValidationGroup.class);
 
-        ConstraintViolation<TicketServiceInputsWrapper> violation = violations.iterator().next();
+		ConstraintViolation<TicketServiceInputsWrapper> violation = violations.iterator().next();
 
-        assertEquals("AccountId is invalid", violation.getMessage());
+		assertEquals("AccountId is invalid", violation.getMessage());
 
-    }
+	}
 
-    @Test
-    void whenAccountIdIsNullArgumentIsNull_thenExpectViolations() {
+	@Test
+	void whenAccountIdIsNullArgumentIsNull_thenExpectViolations() {
 
-        TicketTypeRequest[] ticketTypeRequests = TestsInputsProvider.createTicketRequests(1, 1, 1);
+		TicketTypeRequest[] ticketTypeRequests = TestsInputsProvider.createTicketRequests(1, 1, 1);
 
-        TicketServiceInputsWrapper wrapper = new TicketServiceInputsWrapper(null, ticketTypeRequests);
+		TicketServiceInputsWrapper wrapper = new TicketServiceInputsWrapper(null, ticketTypeRequests);
 
-        Set<ConstraintViolation<TicketServiceInputsWrapper>> violations = validator.validate(wrapper,
-                BasicValidationGroup.class);
+		Set<ConstraintViolation<TicketServiceInputsWrapper>> violations = validator.validate(wrapper,
+				BasicValidationGroup.class);
 
-        ConstraintViolation<TicketServiceInputsWrapper> violation = violations.iterator().next();
+		ConstraintViolation<TicketServiceInputsWrapper> violation = violations.iterator().next();
 
-        assertEquals("AccountId must be provided", violation.getMessage());
+		assertEquals("AccountId must be provided", violation.getMessage());
 
-    }
+	}
 
-    @Test
-    void whenTicketTypeIsEmptyArgumentIsNull_thenExpectViolations() {
+	@Test
+	void whenTicketTypeIsEmptyArgumentIsNull_thenExpectViolations() {
 
-        TicketServiceInputsWrapper wrapper = new TicketServiceInputsWrapper(2L, new TicketTypeRequest[0]);
+		TicketServiceInputsWrapper wrapper = new TicketServiceInputsWrapper(2L, new TicketTypeRequest[0]);
 
-        Set<ConstraintViolation<TicketServiceInputsWrapper>> violations = validator.validate(wrapper,
-                BasicValidationGroup.class);
+		Set<ConstraintViolation<TicketServiceInputsWrapper>> violations = validator.validate(wrapper,
+				BasicValidationGroup.class);
 
-        ConstraintViolation<TicketServiceInputsWrapper> violation = violations.iterator().next();
+		ConstraintViolation<TicketServiceInputsWrapper> violation = violations.iterator().next();
 
-        assertEquals("Ticket type requests must be provided", violation.getMessage());
+		assertEquals("Ticket type requests must be provided", violation.getMessage());
 
-    }
+	}
 
-    @Test
-    void whenTicketTypeElementIsNull_thenExpectViolations() {
+	@Test
+	void whenTicketTypeElementIsNull_thenExpectViolations() {
 
-        TicketServiceInputsWrapper wrapper = new TicketServiceInputsWrapper(2L, new TicketTypeRequest[]{null});
+		TicketServiceInputsWrapper wrapper = new TicketServiceInputsWrapper(2L, new TicketTypeRequest[] { null });
 
-        Set<ConstraintViolation<TicketServiceInputsWrapper>> violations = validator.validate(wrapper,
-                IntermediateValidationGroup.class);
+		Set<ConstraintViolation<TicketServiceInputsWrapper>> violations = validator.validate(wrapper,
+				IntermediateValidationGroup.class);
 
-        ConstraintViolation<TicketServiceInputsWrapper> violation = violations.iterator().next();
+		ConstraintViolation<TicketServiceInputsWrapper> violation = violations.iterator().next();
 
-        assertEquals("Ticket Type Request cannot be null", violation.getMessage());
+		assertEquals("Ticket Type Request cannot be null", violation.getMessage());
 
-    }
+	}
 
-    @Test
-    void whenTicketTypeElementsValuesAreIncorrect_thenExpectViolations() {
+	@Test
+	void whenTicketTypeElementsValuesAreIncorrect_thenExpectViolations() {
 
-        TicketServiceInputsWrapper wrapper = new TicketServiceInputsWrapper(2L,
-                new TicketTypeRequest[]{new TicketTypeRequest(Type.ADULT, -1)});
+		TicketServiceInputsWrapper wrapper = new TicketServiceInputsWrapper(2L,
+				new TicketTypeRequest[] { new TicketTypeRequest(Type.ADULT, -1) });
 
-        Set<ConstraintViolation<TicketServiceInputsWrapper>> violations = validator.validate(wrapper,
-                AdvanceValidationGroup.class);
+		Set<ConstraintViolation<TicketServiceInputsWrapper>> violations = validator.validate(wrapper,
+				AdvanceValidationGroup.class);
 
-        ConstraintViolation<TicketServiceInputsWrapper> violation = violations.iterator().next();
+		ConstraintViolation<TicketServiceInputsWrapper> violation = violations.iterator().next();
 
-        assertEquals("Ticket Type Request is not valid", violation.getMessage());
+		assertEquals("Ticket Type Request is not valid", violation.getMessage());
 
-    }
+	}
 
 }

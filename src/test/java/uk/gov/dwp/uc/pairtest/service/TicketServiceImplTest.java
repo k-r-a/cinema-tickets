@@ -27,65 +27,61 @@ import static org.mockito.ArgumentMatchers.*;
 @SpringBootTest
 class TicketServiceImplTest {
 
-    @Autowired
-    TicketService ticketService;
+	@Autowired
+	private TicketService ticketService;
 
-    @Mock
-    private SeatReservationService mockSeatReservationService;
+	@Mock
+	private SeatReservationService mockSeatReservationService;
 
-    @Mock
-    private TicketPaymentService ticketPaymentService;
+	@Mock
+	private TicketPaymentService ticketPaymentService;
 
-    @Mock
-    private TicketPriceCalculator ticketPriceCalculator;
+	@Mock
+	private TicketPriceCalculator ticketPriceCalculator;
 
-    @Mock
-    private TicketsRuleValidator ticketsRuleValidator;
+	@Mock
+	private TicketsRuleValidator ticketsRuleValidator;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+	@BeforeEach
+	void setUp() {
+		MockitoAnnotations.openMocks(this);
+	}
 
+	@ParameterizedTest
+	@CsvSource({ "1,1,1", "1,0,1", "0,1,1" })
+	@Description("Given an valid request user should be able to book ticket")
+	void whenNoValidationFailures_thenSuccess(int noOfInfantBookings, int noOfChildBookings, int noOfAdultBookings) {
+		TicketTypeRequest[] testInputs = TestsInputsProvider.createTicketRequests(noOfInfantBookings, noOfChildBookings,
+				noOfAdultBookings);
+		Mockito.doNothing().when(mockSeatReservationService).reserveSeat(anyLong(), anyInt());
+		Mockito.doNothing().when(ticketPaymentService).makePayment(anyLong(), anyInt());
 
-    @ParameterizedTest
-    @CsvSource({"1,1,1", "1,0,1", "0,1,1"})
-    @Description("Given an valid request user should be able to book ticket")
-    void whenNoValidationFailures_thenSuccess(int noOfInfantBookings, int noOfChildBookings, int noOfAdultBookings) {
-        TicketTypeRequest[] testInputs = TestsInputsProvider.createTicketRequests(noOfInfantBookings,
-                noOfChildBookings, noOfAdultBookings);
-        Mockito.doNothing().when(mockSeatReservationService).reserveSeat(anyLong(), anyInt());
-        Mockito.doNothing().when(ticketPaymentService).makePayment(anyLong(), anyInt());
+		Mockito.when(ticketsRuleValidator.validate(any())).thenReturn(new StringJoiner(","));
+		Mockito.when(ticketPriceCalculator.calculateTotalPriceForTickets(anyInt(), anyInt(), anyInt())).thenReturn(30);
+		Assertions.assertDoesNotThrow(() -> ticketService.purchaseTickets(2L, testInputs));
+	}
 
-        Mockito.when(ticketsRuleValidator.validate(any())).thenReturn(new StringJoiner(","));
-        Mockito.when(ticketPriceCalculator.calculateTotalPriceForTickets(anyInt(), anyInt(), anyInt()))
-                .thenReturn(30);
-        Assertions.assertDoesNotThrow(() -> ticketService.purchaseTickets(2L, testInputs));
-    }
+	@Test
+	@Description("Should Fail if there is a input validation Error")
+	void whenInputValidationFails_thenException() {
+		TicketTypeRequest[] testInputs = TestsInputsProvider.createTicketRequests(1, 1, 1);
+		Mockito.when(ticketsRuleValidator.validate(testInputs)).thenReturn(new StringJoiner(","));
+		Assertions.assertThrows(InvalidPurchaseException.class, () -> {
+			ticketService.purchaseTickets(-5L, testInputs);
+		});
+	}
 
-    @Test
-    @Description("Should Fail if there is a input validation Error")
-    void whenInputValidationFails_thenException() {
-        TicketTypeRequest[] testInputs = TestsInputsProvider.createTicketRequests(1,
-                1, 1);
-        Mockito.when(ticketsRuleValidator.validate(testInputs))
-                .thenReturn(new StringJoiner(","));
-        Assertions.assertThrows(InvalidPurchaseException.class, () -> {
-            ticketService.purchaseTickets(-5L, testInputs);
-        });
-    }
-
-    @ParameterizedTest()
-    @CsvSource({"1,1,0", "1,0,0", "0,1,0", "10,10,10"})
-    @Description("Should Fail if there is a rule validation Error")
-    void whenBusinessValidationFails_thenException(int noOfInfantBookings, int noOfChildBookings,
-                                                   int noOfAdultBookings) {
-        TicketTypeRequest[] testInputs = TestsInputsProvider.createTicketRequests(noOfInfantBookings,
-                noOfChildBookings, noOfAdultBookings);
-        Mockito.when(ticketsRuleValidator.validate(testInputs))
-                .thenReturn(new StringJoiner(",").add("Some invalid rule message"));
-        Assertions.assertThrows(InvalidPurchaseException.class, () -> {
-            ticketService.purchaseTickets(2L, testInputs);
-        });
-    }
+	@ParameterizedTest()
+	@CsvSource({ "1,1,0", "1,0,0", "0,1,0", "10,10,10" })
+	@Description("Should Fail if there is a rule validation Error")
+	void whenBusinessValidationFails_thenException(int noOfInfantBookings, int noOfChildBookings,
+			int noOfAdultBookings) {
+		TicketTypeRequest[] testInputs = TestsInputsProvider.createTicketRequests(noOfInfantBookings, noOfChildBookings,
+				noOfAdultBookings);
+		Mockito.when(ticketsRuleValidator.validate(testInputs))
+				.thenReturn(new StringJoiner(",").add("Some invalid rule message"));
+		Assertions.assertThrows(InvalidPurchaseException.class, () -> {
+			ticketService.purchaseTickets(2L, testInputs);
+		});
+	}
 }

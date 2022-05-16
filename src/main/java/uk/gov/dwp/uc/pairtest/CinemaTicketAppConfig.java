@@ -7,8 +7,8 @@ import thirdparty.paymentgateway.TicketPaymentServiceImpl;
 
 @Configuration
 public class CinemaTicketAppConfig {
-    @Bean
-    public TicketPaymentService getTicketPaymentService() {
-        return new TicketPaymentServiceImpl();
-    }
+	@Bean
+	public TicketPaymentService getTicketPaymentService() {
+		return new TicketPaymentServiceImpl();
+	}
 }

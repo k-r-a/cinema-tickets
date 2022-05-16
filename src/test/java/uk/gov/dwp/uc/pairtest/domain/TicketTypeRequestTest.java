@@ -15,41 +15,41 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest
 class TicketTypeRequestTest {
 
-    @Autowired
-    private Validator validator;
+	@Autowired
+	private Validator validator;
 
-    @Test
-    void whenAllArgumentsPassed_thenObjectIsCreated() {
-        TicketTypeRequest ticketTypeRequest = new TicketTypeRequest(Type.ADULT, 2);
-        assertNotNull(ticketTypeRequest);
-    }
+	@Test
+	void whenAllArgumentsPassed_thenObjectIsCreated() {
+		TicketTypeRequest ticketTypeRequest = new TicketTypeRequest(Type.ADULT, 2);
+		assertNotNull(ticketTypeRequest);
+	}
 
-    @Test
-    void whenAllValidArgumentsPassed_thenExceptNoViolations() {
-        TicketTypeRequest ticketTypeRequest = new TicketTypeRequest(Type.ADULT, 2);
-        Set<ConstraintViolation<TicketTypeRequest>> violations = validator.validate(ticketTypeRequest);
-        assertEquals(0, violations.size());
-    }
+	@Test
+	void whenAllValidArgumentsPassed_thenExceptNoViolations() {
+		TicketTypeRequest ticketTypeRequest = new TicketTypeRequest(Type.ADULT, 2);
+		Set<ConstraintViolation<TicketTypeRequest>> violations = validator.validate(ticketTypeRequest);
+		assertEquals(0, violations.size());
+	}
 
-    @Test
-    void whenTicketTypeIsNull_thenExpectViolation() {
-        TicketTypeRequest ticketTypeRequest = new TicketTypeRequest(null, 2);
+	@Test
+	void whenTicketTypeIsNull_thenExpectViolation() {
+		TicketTypeRequest ticketTypeRequest = new TicketTypeRequest(null, 2);
 
-        Set<ConstraintViolation<TicketTypeRequest>> violations = validator.validate(ticketTypeRequest);
-        assertEquals(1, violations.size());
+		Set<ConstraintViolation<TicketTypeRequest>> violations = validator.validate(ticketTypeRequest);
+		assertEquals(1, violations.size());
 
-        ConstraintViolation<TicketTypeRequest> violation = violations.iterator().next();
-        assertEquals("Ticket type should be provided", violation.getMessage());
-    }
+		ConstraintViolation<TicketTypeRequest> violation = violations.iterator().next();
+		assertEquals("Ticket type should be provided", violation.getMessage());
+	}
 
-    @Test
-    void whenNoOfTicketIsNegative_thenExpectViolation() {
-        TicketTypeRequest ticketTypeRequest = new TicketTypeRequest(Type.ADULT, -2);
+	@Test
+	void whenNoOfTicketIsNegative_thenExpectViolation() {
+		TicketTypeRequest ticketTypeRequest = new TicketTypeRequest(Type.ADULT, -2);
 
-        Set<ConstraintViolation<TicketTypeRequest>> violations = validator.validate(ticketTypeRequest);
-        assertEquals(1, violations.size());
+		Set<ConstraintViolation<TicketTypeRequest>> violations = validator.validate(ticketTypeRequest);
+		assertEquals(1, violations.size());
 
-        ConstraintViolation<TicketTypeRequest> violation = violations.iterator().next();
-        assertEquals("Number of tickets cannot be negative", violation.getMessage());
-    }
+		ConstraintViolation<TicketTypeRequest> violation = violations.iterator().next();
+		assertEquals("Number of tickets cannot be negative", violation.getMessage());
+	}
 }

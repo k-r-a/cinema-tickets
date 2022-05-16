@@ -12,21 +12,21 @@ import uk.gov.dwp.uc.pairtest.helper.TestsInputsProvider;
 @SpringBootTest
 class TicketsRuleValidatorTest {
 
-    @Autowired
-    private TicketsRuleValidator ticketsRuleValidator;
+	@Autowired
+	private TicketsRuleValidator ticketsRuleValidator;
 
-    @ParameterizedTest
-    @CsvSource({"1,0,0", "0,1,0", "5,10,10"})
-    void whenRuleViolationOccurs_thenInvalid(int noOfInfantBookings, int noOfChildBookings, int noOfAdultBookings) {
-        TicketTypeRequest[] ticketRequests = TestsInputsProvider.createTicketRequests(noOfInfantBookings, noOfChildBookings, noOfAdultBookings);
-        Assertions.assertTrue((ticketsRuleValidator.validate(ticketRequests)).length() > 1);
-    }
+	@ParameterizedTest
+	@CsvSource({ "1,0,0", "0,1,0", "5,10,10" })
+	void whenRuleViolationOccurs_thenInvalid(int noOfInfantBookings, int noOfChildBookings, int noOfAdultBookings) {
+		TicketTypeRequest[] ticketRequests = TestsInputsProvider.createTicketRequests(noOfInfantBookings,
+				noOfChildBookings, noOfAdultBookings);
+		Assertions.assertTrue((ticketsRuleValidator.validate(ticketRequests)).length() > 1);
+	}
 
-    @Test
-    void whenNoRuleViolations_thenValid() {
-        TicketTypeRequest[] ticketRequests = TestsInputsProvider.createTicketRequests(1, 1, 1);
-        Assertions.assertTrue((ticketsRuleValidator.validate(ticketRequests)).length() == 0);
-    }
-
+	@Test
+	void whenNoRuleViolations_thenValid() {
+		TicketTypeRequest[] ticketRequests = TestsInputsProvider.createTicketRequests(1, 1, 1);
+		Assertions.assertTrue((ticketsRuleValidator.validate(ticketRequests)).length() == 0);
+	}
 
 }

@@ -16,24 +16,25 @@ import javax.validation.ConstraintValidatorContext;
 @SpringBootTest
 class NotNullContentsValidatorTest {
 
-    @Autowired
-    private NotNullContentsValidator notNullContentsValidator;
+	@Autowired
+	private NotNullContentsValidator notNullContentsValidator;
 
-    @Mock
-    private ConstraintValidatorContext constraint;
+	@Mock
+	private ConstraintValidatorContext constraint;
 
-    @Test
-    @Description("When array contains null then validation fails")
-    void whenContentsAreNull_thenNotValid() {
-        TicketTypeRequest[] nullContentInput = TestsInputsProvider.createTicketRequestsWithNullContent();
-        Assertions.assertFalse(notNullContentsValidator.isValid(nullContentInput, constraint));
-    }
+	@Test
+	@Description("When array contains null then validation fails")
+	void whenContentsAreNull_thenNotValid() {
+		TicketTypeRequest[] nullContentInput = TestsInputsProvider.createTicketRequestsWithNullContent();
+		Assertions.assertFalse(notNullContentsValidator.isValid(nullContentInput, constraint));
+	}
 
-    @ParameterizedTest()
-    @CsvSource({"1,1,1", "0,0,1", "0,1,1", "1,0,1"})
-    @Description("Tests Happy path")
-    void whenContentsAreCorrect_thenValid(int noOfInfantBookings, int noOfChildBookings, int noOfAdultBookings) {
-        TicketTypeRequest[] ticketRequests = TestsInputsProvider.createTicketRequests(noOfInfantBookings, noOfChildBookings, noOfAdultBookings);
-        Assertions.assertTrue(notNullContentsValidator.isValid(ticketRequests, constraint));
-    }
+	@ParameterizedTest()
+	@CsvSource({ "1,1,1", "0,0,1", "0,1,1", "1,0,1" })
+	@Description("Tests Happy path")
+	void whenContentsAreCorrect_thenValid(int noOfInfantBookings, int noOfChildBookings, int noOfAdultBookings) {
+		TicketTypeRequest[] ticketRequests = TestsInputsProvider.createTicketRequests(noOfInfantBookings,
+				noOfChildBookings, noOfAdultBookings);
+		Assertions.assertTrue(notNullContentsValidator.isValid(ticketRequests, constraint));
+	}
 }

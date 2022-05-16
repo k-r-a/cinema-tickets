@@ -15,18 +15,20 @@ import java.util.Set;
 @Component
 public class ValidContentsValidator implements ConstraintValidator<ValidContents, TicketTypeRequest[]> {
 
-    @Autowired
-    private Validator validator;
+	@Autowired
+	private Validator validator;
 
-    @Override
-    public void initialize(ValidContents constraintAnnotation) {
-        ConstraintValidator.super.initialize(constraintAnnotation);
-    }
+	@Override
+	public void initialize(ValidContents constraintAnnotation) {
+		ConstraintValidator.super.initialize(constraintAnnotation);
+	}
 
-    @Override
-    public boolean isValid(TicketTypeRequest[] ticketTypeRequests, ConstraintValidatorContext constraintValidatorContext) {
-        Set<ConstraintViolation<TicketTypeRequest>> ticketTypeRequestsConstraintViolations = new HashSet<>();
-        Arrays.stream(ticketTypeRequests).allMatch(ticketTypeRequest -> ticketTypeRequestsConstraintViolations.addAll(validator.validate(ticketTypeRequest)));
-        return ticketTypeRequestsConstraintViolations.isEmpty();
-    }
+	@Override
+	public boolean isValid(TicketTypeRequest[] ticketTypeRequests,
+			ConstraintValidatorContext constraintValidatorContext) {
+		Set<ConstraintViolation<TicketTypeRequest>> ticketTypeRequestsConstraintViolations = new HashSet<>();
+		Arrays.stream(ticketTypeRequests).allMatch(ticketTypeRequest -> ticketTypeRequestsConstraintViolations
+				.addAll(validator.validate(ticketTypeRequest)));
+		return ticketTypeRequestsConstraintViolations.isEmpty();
+	}
 }

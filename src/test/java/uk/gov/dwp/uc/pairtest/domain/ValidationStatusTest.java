@@ -9,12 +9,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 class ValidationStatusTest {
 
-    @Test
-    void test() {
-        ValidationStatus validationStatus = new ValidationStatus(Status.VALID, "message");
+	@Test
+	void test() {
+		ValidationStatus validationStatus = new ValidationStatus(Status.VALID, "message");
 
-        assertEquals(Status.VALID, validationStatus.getStatus());
-        assertEquals("message", validationStatus.getMessage());
-    }
+		assertEquals(Status.VALID, validationStatus.getStatus());
+		assertEquals("message", validationStatus.getMessage());
+	}
 
 }

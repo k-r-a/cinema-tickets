@@ -13,22 +13,22 @@ import java.util.StringJoiner;
 @Validated
 public class TicketsRuleValidator {
 
-    private List<TicketRule> rules;
+	private List<TicketRule> rules;
 
-    @Autowired
-    public TicketsRuleValidator(List<TicketRule> ticketRules) {
-        this.rules = ticketRules;
-    }
+	@Autowired
+	public TicketsRuleValidator(List<TicketRule> ticketRules) {
+		this.rules = ticketRules;
+	}
 
-    public StringJoiner validate(TicketTypeRequest[] ticketRequests) {
+	public StringJoiner validate(TicketTypeRequest[] ticketRequests) {
 
-        StringJoiner errors = new StringJoiner(",");
-        for (TicketRule rule : rules) {
-            ValidationStatus validationStatus = rule.isValid(ticketRequests);
-            if (ValidationStatus.Status.INVALID.equals(validationStatus.getStatus())) {
-                errors.add(validationStatus.getMessage());
-            }
-        }
-        return errors;
-    }
+		StringJoiner errors = new StringJoiner(",");
+		for (TicketRule rule : rules) {
+			ValidationStatus validationStatus = rule.isValid(ticketRequests);
+			if (ValidationStatus.Status.INVALID.equals(validationStatus.getStatus())) {
+				errors.add(validationStatus.getMessage());
+			}
+		}
+		return errors;
+	}
 }

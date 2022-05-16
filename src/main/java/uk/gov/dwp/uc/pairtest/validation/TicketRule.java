@@ -5,5 +5,5 @@ import uk.gov.dwp.uc.pairtest.domain.ValidationStatus;
 
 @FunctionalInterface
 public interface TicketRule {
-    ValidationStatus isValid(TicketTypeRequest[] ticketTypeRequests);
+	ValidationStatus isValid(TicketTypeRequest[] ticketTypeRequests);
 }

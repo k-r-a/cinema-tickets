@@ -12,17 +12,20 @@ import java.util.stream.Collectors;
 @Component
 public class MaxTicketBookingsAllowedRule implements TicketRule {
 
-    @Resource
-    @Value("${max.tickets.allowed}")
-    private String maxTicketsAllowed;
+	@Resource
+	@Value("${max.tickets.allowed}")
+	private String maxTicketsAllowed;
 
-    @Override
-    public ValidationStatus isValid(TicketTypeRequest[] ticketTypeRequests) {
+	@Override
+	public ValidationStatus isValid(TicketTypeRequest[] ticketTypeRequests) {
 
-        int totalBookingsRequested = Arrays.stream(ticketTypeRequests).map(ticketTypeRequest -> ticketTypeRequest.getNoOfTickets()).collect(Collectors.summingInt(Integer::intValue));
-        if (totalBookingsRequested > Integer.valueOf(maxTicketsAllowed)) {
-            return new ValidationStatus(ValidationStatus.Status.INVALID, "Number of booking requests exceeded maximum limit");
-        }
-        return new ValidationStatus(ValidationStatus.Status.VALID, "Number of booking requests is within limit");
-    }
+		int totalBookingsRequested = Arrays.stream(ticketTypeRequests)
+				.map(ticketTypeRequest -> ticketTypeRequest.getNoOfTickets())
+				.collect(Collectors.summingInt(Integer::intValue));
+		if (totalBookingsRequested > Integer.valueOf(maxTicketsAllowed)) {
+			return new ValidationStatus(ValidationStatus.Status.INVALID,
+					"Number of booking requests exceeded maximum limit");
+		}
+		return new ValidationStatus(ValidationStatus.Status.VALID, "Number of booking requests is within limit");
+	}
 }
